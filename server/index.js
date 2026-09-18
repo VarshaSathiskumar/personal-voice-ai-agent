@@ -1,11 +1,8 @@
 import "dotenv/config";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import express from "express";
 import cors from "cors";
 import { searchResume } from "./rag.js";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3000;
 const REALTIME_MODEL = process.env.REALTIME_MODEL || "gpt-realtime";
 const REALTIME_VOICE = process.env.REALTIME_VOICE || "shimmer";
@@ -48,11 +45,14 @@ const SEARCH_RESUME_TOOL = {
 
 const app = express();
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "..", "public")));
 
 const corsOptions = {
   origin: [ALLOWED_ORIGIN, ...LOCAL_ORIGINS],
 };
+
+app.get("/", (req, res) => {
+  res.json({ status: "ok" });
+});
 
 app.post("/session", cors(corsOptions), async (req, res) => {
   try {

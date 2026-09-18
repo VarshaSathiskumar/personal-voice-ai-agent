@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: portfolio-voice-agent
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ALLOWED_ORIGIN
+        value: https://varshasathiskumar.github.io

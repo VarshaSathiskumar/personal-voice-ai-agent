@@ -1,8 +1,9 @@
-# Portfolio Voice Agent
+# Portfolio Voice Agent (backend)
 
-A small voice agent that visitors can talk to on your portfolio site. It answers questions
-about your education, work experience, projects, and interests — grounded in your resume via
-retrieval-augmented generation (RAG).
+An API-only backend for a voice agent that visitors can talk to on your portfolio site. It
+answers questions about your education, work experience, projects, and interests — grounded in
+your resume via retrieval-augmented generation (RAG). Your portfolio site's own frontend calls
+this API directly (cross-origin); there's no UI in this repo.
 
 ## How it works
 
@@ -16,11 +17,11 @@ retrieval-augmented generation (RAG).
   does an in-memory cosine-similarity search over the pre-computed chunks — no vector database.
 
 ```
-Browser (mic) --WebRTC--> OpenAI Realtime API
-     |                          |
-     | POST /session            | search_resume tool call
-     v                          v
-Express server  <----------  POST /retrieve (query)
+Portfolio frontend (mic) --WebRTC--> OpenAI Realtime API
+     |                                     |
+     | POST /session                       | search_resume tool call
+     v                                     v
+Express server (this repo)  <----------  POST /retrieve (query)
      |
      v
 data/embeddings.json (cosine similarity)
@@ -35,8 +36,24 @@ npm run build-index    # embeds data/resume.json -> data/embeddings.json
 npm run dev             # starts the server at http://localhost:3000
 ```
 
-Open `http://localhost:3000`, click **Start talking**, grant mic access, and ask about
-education, experience, projects, or interests.
+`GET http://localhost:3000/` returns `{"status":"ok"}` once the server is up.
+
+## Consuming the API
+
+This backend has no UI — your portfolio site's frontend talks to it directly:
+
+- **`POST /session`** — no body. Returns an ephemeral Realtime API key
+  (`{ value, ... }`). Use it client-side to open a WebRTC connection straight to
+  `https://api.openai.com/v1/realtime/calls` (your real `OPENAI_API_KEY` never leaves this
+  server). Create an `RTCPeerConnection`, attach the mic track, open a data channel, and send the
+  SDP offer with `Authorization: Bearer <ephemeralKey>`.
+- **`POST /retrieve`** — body `{ "query": "..." }`. Returns `{ results: [{ section, text,
+  score }, ...] }` from the resume RAG index. Call this whenever the model's Realtime session
+  invokes the `search_resume` tool (listen for `response.function_call_arguments.done` events on
+  the data channel), then send the results back as a `function_call_output` item.
+
+Both routes are CORS-restricted to `ALLOWED_ORIGIN` (plus `localhost:8000` for local dev) — see
+`server/index.js`.
 
 ## Using your real resume
 
@@ -54,24 +71,18 @@ The schema also supports `publications`, `certifications`, and `skills` (an obje
 category → list of items) in addition to `summary`, `education`, `experience`, `projects`,
 and `interests` — see `data/resume.json` for the current shape.
 
-## Deploying
+## Deploying (Render)
 
-Any Node host works (Render, Railway, Fly.io, a VPS, etc.) — it just needs to run
-`npm start` with `OPENAI_API_KEY` set as an environment variable. The app serves both the
-API routes and the static widget from the same process, so one deploy is enough.
+This repo includes a `render.yaml` blueprint:
 
-## Embedding in the portfolio
+1. In the Render dashboard, **New → Blueprint**, point it at this repo.
+2. Render reads `render.yaml` and creates a web service (`npm install` build, `npm start` start).
+3. Set the `OPENAI_API_KEY` secret when prompted (it's marked `sync: false` so it isn't stored in
+   the repo).
+4. `ALLOWED_ORIGIN` defaults to `https://varshasathiskumar.github.io` in `render.yaml` — update it
+   there (or override it in the dashboard) if your portfolio's origin changes.
 
-Once deployed, embed the widget as an iframe inside the portfolio's `#about` section
-(`~/Documents/GitHub/Portfolio/src/sections/about/about.js`), e.g.:
+Without the blueprint, any Node host works the same way: run `npm start` with `OPENAI_API_KEY` set.
 
-```html
-<iframe
-  src="https://your-deployed-voice-agent-url.com"
-  title="Ask Varsha — voice agent"
-  style="width: 100%; max-width: 420px; height: 480px; border: none;"
-  allow="microphone"
-></iframe>
-```
-
-The `allow="microphone"` attribute is required for the mic to work inside the iframe.
+Point your portfolio frontend's `fetch` calls at the resulting `https://<service>.onrender.com`
+URL instead of relative paths, since it's now a different origin.

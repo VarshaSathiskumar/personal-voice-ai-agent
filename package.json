@@ -4,6 +4,9 @@
   "description": "A voice agent that answers questions about Varsha's education, work experience, projects, and interests, grounded in her resume via RAG.",
   "type": "module",
   "private": true,
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build-index": "node server/embedIndex.js",
     "dev": "node server/index.js",
