@@ -1,0 +1,107 @@
+{
+  "summary": "Software Engineer with 4+ years of experience building scalable full-stack enterprise and B2B web applications, recently expanding into Agentic AI systems. Skilled at taking features from design through production and building reliable software that delivers measurable business impact.",
+  "education": [
+    {
+      "school": "Colorado School of Mines",
+      "degree": "Master of Science in Computer Science (GPA: 3.6/4.0)",
+      "dates": "Expected Dec 2026",
+      "details": "Golden, CO. Coursework: Data Structures and Algorithms, Advanced Databases, Software Design Patterns, Information Security and Privacy."
+    },
+    {
+      "school": "Thiagarajar College of Engineering",
+      "degree": "Bachelor of Technology in Information Technology (GPA: 8.7/10.0)",
+      "dates": "Apr 2021",
+      "details": "Madurai, India."
+    }
+  ],
+  "experience": [
+    {
+      "company": "NociQuant Inc, Minnesota City, MN",
+      "role": "AI Software Engineer Intern",
+      "dates": "Jun 2026 - Aug 2026",
+      "highlights": [
+        "Developed a full-stack healthcare application for reviewing patient findings, AI-generated differential diagnoses, and medical evidence, supporting earlier diagnosis targeting $371.4B in potential chronic-pain savings using React and TypeScript.",
+        "Engineered a RAG pipeline across 1,700+ medical papers covering 59 diseases, improving recall by 20% across 1,000 cases and increasing evidence completeness for diagnostic agents using LangChain, Pinecone, and Sentence-Transformers.",
+        "Architected a multi-agent diagnostic debate system, improving diagnostic accuracy from 68% to 78% across 800 clinical cases spanning 11 diseases, using likelihood-ratio ranking, LangGraph, Gemini Lite/Pro and GPT models.",
+        "Automated verification across 6 diagnostic configurations using 20+ metrics, including precision, recall, MRR, and ground-truth probability validation, identifying performance gaps through Python-based evaluation and scoring."
+      ]
+    },
+    {
+      "company": "Kimberly Clark, India",
+      "role": "Full Stack Software Engineer",
+      "dates": "May 2023 - Mar 2025",
+      "highlights": [
+        "Owned full-stack development of an enterprise pricing application, delivering 50+ features across 4 global regions and processing 200+ pricing agreements weekly, achieving over 97% user acceptance using C# and ASP.NET Core.",
+        "Engineered 10+ REST APIs integrating SAP and Salesforce across 4 global regions, supporting 15K+ monthly pricing transactions while improving maintainability, security, and data access using Node.js and Redis.",
+        "Optimized SQL Server performance across 4 databases and regions, reducing API response time from 5 to 4.4 minutes across 1000 test cases and reducing 10K record report downloads to 30 seconds.",
+        "Modernized a legacy enterprise application into 4 independently deployed microservices, reducing synchronization failures and production support incidents by 32% using Docker and Kubernetes.",
+        "Led migration of 4 enterprise SQL Server databases and ETL workloads to Azure with 0 production downtime, supporting cloud transformation and continued system availability across 4 global regions through Azure migration practices.",
+        "Migrated 15 legacy SSIS packages to Azure Data Factory, reducing batch processing from 4 hours to 2.5 hours and making business-critical data available 1.5 hours earlier for downstream reporting and analytics."
+      ]
+    },
+    {
+      "company": "Kimberly Clark, India",
+      "role": "Associate Software Engineer",
+      "dates": "Sep 2021 - Apr 2023",
+      "highlights": [
+        "Developed IoT monitoring dashboards supporting 5,000+ users across 33M+ sq. ft. in 15+ U.S. states and Canada, contributing to 105% higher visitor satisfaction and 80% lower consumable waste using Python, React and JavaScript.",
+        "Built serverless Azure pipelines processing 1M+ daily IoT events across 2,000+ devices, cutting API response times from 40 to 20 seconds and eliminating 15 monthly complaints and work orders while saving $68,052 annually per user.",
+        "Implemented automated testing across 100+ workflows for 1 enterprise web and mobile application, expanding test cases from 1,200 to 1,800+ while identifying pre-release defects and regressions using Jest, pytest, and React Testing Library.",
+        "Optimized Azure CI/CD pipelines across 4 repositories supporting 1 application, reducing deployment time from 25 to 12 minutes and enabling faster, more frequent releases through Docker caching, parallel execution, and automated quality gates."
+      ]
+    },
+    {
+      "company": "Kimberly Clark, India",
+      "role": "Software Engineer Intern",
+      "dates": "Jan 2021 - Aug 2021",
+      "highlights": [
+        "Designed and deployed a centralized consulting web platform serving 3,000+ global team members and processing 75 weekly requests, reducing processing from 1 day to 4 hours while standardizing request coordination using Power Platform Tool.",
+        "Built 15+ reusable UI components supporting 10 teams of 5 members each, reducing duplicated development effort and improving application UI consistency using Microsoft Power Apps, Power Fx, and JavaScript.",
+        "Migrated 20+ WordPress pages to SharePoint and created 10+ onboarding guides, increasing daily page engagement from 30 to 100 views while improving information accessibility for 3,000+ global team members."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Geospatial Web Platform",
+      "description": "Engineered a GIS platform reducing geological data query time from 40 mins to 2 secs and enabling interactive visualization across 12 map layers for Delaware Mountain Group exploration. Developed an ETL pipeline consolidating 2TB+ of geological data from 30+ source files and processing 10GB+ per execution, standardizing geospatial data storage. Implemented role-based access control across 22 backend APIs and 3 permission levels, achieving an 85% pass rate across 350 security and validation test cases.",
+      "tech": ["React", "FastAPI", "Mapbox GL JS", "PostgreSQL", "Supabase", "PostGIS", "OIDC", "OAuth 2.0", "JWT"],
+      "dates": "Jan 2026 - May 2026",
+      "link": ""
+    },
+    {
+      "name": "Assessing Response Consistency across Query Variants in LLMs",
+      "description": "Built an automated benchmarking pipeline comparing 5 OpenAI models across 10,000+ paraphrased queries, reducing processing time from 3,199 to 1,530 seconds. Evaluated Chain-of-Thought prompting across 2,000 paraphrased queries and 5 OpenAI model versions, achieving 15% higher technical-reasoning scores versus 3% for general text while identifying reasoning inconsistencies.",
+      "tech": ["Python", "DuckDB", "Apache Arrow UDFs"],
+      "dates": "Sep 2025 - Dec 2025",
+      "link": ""
+    },
+    {
+      "name": "Product Review Summarization Platform",
+      "description": "Built a distributed NLP pipeline processing 22GB of Amazon reviews, achieving 84.03% sentiment accuracy and 0.8431 weighted F1 while generating product-level intelligence on sentiment, strengths, weaknesses, and recurring complaints. Implemented Power BI dashboards analyzing review data across 12 product categories for product buyers and business stakeholders.",
+      "tech": ["Llama 3.1", "BGE-M3", "BERTopic", "Power BI"],
+      "dates": "May 2026 - Jul 2026",
+      "link": ""
+    }
+  ],
+  "publications": [
+    {
+      "title": "Automation Leaf Disease Detection using CNN Algorithm",
+      "venue": "Springer ICTIS 2020",
+      "details": "Developed and trained a CNN-based image classification model on 20GB+ of apple, corn, and tomato leaf images, achieving 96% test accuracy in disease detection using Python, TensorFlow, and PyTorch."
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Microsoft Certified: Azure Fundamentals (AZ-900)",
+      "dates": "Jan 2024",
+      "details": "Validated foundational knowledge of cloud computing, Azure services, security, networking, pricing, and cloud architecture concepts."
+    }
+  ],
+  "skills": {
+    "Programming Languages & Frameworks": ["Python", "C#", "SQL", "JavaScript", "TypeScript", "HTML", "CSS", "React", "Node.js", "FastAPI", "Jest", "pytest", "Playwright", "Selenium", "Cypress"],
+    "Development Tools & Platforms": ["PostgreSQL", "Microsoft SQL Server", "MySQL", "Supabase", "Azure Cosmos DB", "Redis", "AWS", "Microsoft Azure", "Docker", "Kubernetes", "Azure DevOps", "Git", "GitHub", "Jira", "Postman", "Swagger/OpenAPI"],
+    "AI/ML Tools": ["TensorFlow", "Keras", "PyTorch", "Scikit-learn", "NumPy", "Pandas", "Matplotlib", "Hugging Face", "Sentence-Transformers", "LangChain", "LangGraph", "MCP", "Jupyter Notebook", "Pinecone", "Claude Code"]
+  },
+  "interests": []
+}
