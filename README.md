@@ -15,6 +15,9 @@ this API directly (cross-origin); there's no UI in this repo.
   education entry, etc.) and embedded once with `npm run build-index`. During a conversation, the
   model calls a `search_resume` tool whenever it needs facts; the server embeds the query and
   does an in-memory cosine-similarity search over the pre-computed chunks — no vector database.
+  Vague queries (e.g. "background") can embed ambiguously, so `searchResume()` always guarantees
+  the `summary` chunk is included in the results as an identity anchor, even if it didn't score
+  into the top-K on its own.
 
 ```
 Portfolio frontend (mic) --WebRTC--> OpenAI Realtime API
@@ -55,10 +58,10 @@ This backend has no UI — your portfolio site's frontend talks to it directly:
 Both routes are CORS-restricted to `ALLOWED_ORIGIN` (plus `localhost:8000` for local dev) — see
 `server/index.js`.
 
-## Using your real resume
+## Updating your resume
 
-`data/resume.json` currently has placeholder content. Replace it with your real data (same
-shape: `summary`, `education`, `experience`, `projects`, `interests`), then re-run:
+`data/resume.json` holds the real resume content the agent is grounded in. Whenever you edit it,
+re-run:
 
 ```bash
 npm run build-index
@@ -67,9 +70,12 @@ npm run build-index
 This regenerates `data/embeddings.json`. Commit the regenerated file so deployments don't need
 to call the embeddings API on boot.
 
-The schema also supports `publications`, `certifications`, and `skills` (an object of
-category → list of items) in addition to `summary`, `education`, `experience`, `projects`,
-and `interests` — see `data/resume.json` for the current shape.
+Schema: top-level `summary` (string), `education[]`, `experience[]`, `projects[]`,
+`publications[]`, `certifications[]`, `skills` (an object of category → list of items), and
+`interests[]` — all optional except `summary`. Each `experience` entry can include an optional
+`summary` field (a one-line framing of the role); when present, `embedIndex.js` folds it into
+that job's chunk ahead of the detailed `highlights`. See `data/resume.json` for the current
+shape.
 
 ## Deploying (Render)
 
