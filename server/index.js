@@ -1,7 +1,12 @@
 import "dotenv/config";
+import { Agent, setGlobalDispatcher } from "undici";
 import express from "express";
 import cors from "cors";
 import { searchResume } from "./rag.js";
+
+// Keep sockets to api.openai.com warm between calls in the same conversation
+// (default keep-alive timeout is only ~4s, too short for pauses between tool calls).
+setGlobalDispatcher(new Agent({ keepAliveTimeout: 30_000, keepAliveMaxTimeout: 600_000 }));
 
 const PORT = process.env.PORT || 3000;
 const REALTIME_MODEL = process.env.REALTIME_MODEL || "gpt-realtime";
@@ -43,18 +48,19 @@ const SEARCH_RESUME_TOOL = {
   },
 };
 
-const app = express();
-app.use(express.json());
-
 const corsOptions = {
   origin: [ALLOWED_ORIGIN, ...LOCAL_ORIGINS],
 };
+
+const app = express();
+app.use(express.json());
+app.use(cors(corsOptions));
 
 app.get("/", (req, res) => {
   res.json({ status: "ok" });
 });
 
-app.post("/session", cors(corsOptions), async (req, res) => {
+app.post("/session", async (req, res) => {
   try {
     if (!process.env.OPENAI_API_KEY) {
       throw new Error("OPENAI_API_KEY is not set on the server.");
@@ -75,7 +81,7 @@ app.post("/session", cors(corsOptions), async (req, res) => {
           tool_choice: "auto",
           audio: {
             input: {
-              transcription: { model: "whisper-1" },
+              transcription: { model: "gpt-4o-mini-transcribe" },
               turn_detection: {
                 type: "semantic_vad",
                 eagerness: "auto",
@@ -102,7 +108,7 @@ app.post("/session", cors(corsOptions), async (req, res) => {
   }
 });
 
-app.post("/retrieve", cors(corsOptions), async (req, res) => {
+app.post("/retrieve", async (req, res) => {
   try {
     const { query } = req.body;
     if (!query || typeof query !== "string") {

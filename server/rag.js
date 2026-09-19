@@ -10,12 +10,24 @@ const QUERY_CACHE_LIMIT = 100;
 const client = new OpenAI();
 const queryEmbeddingCache = new Map();
 
+function vectorNorm(v) {
+  let sum = 0;
+  for (let i = 0; i < v.length; i++) sum += v[i] * v[i];
+  return Math.sqrt(sum);
+}
+
 let indexPromise = null;
 
 function loadIndex() {
   if (!indexPromise) {
     indexPromise = readFile(EMBEDDINGS_PATH, "utf-8")
       .then((raw) => JSON.parse(raw))
+      .then((index) => {
+        for (const chunk of index.chunks) {
+          chunk.norm = vectorNorm(chunk.embedding);
+        }
+        return index;
+      })
       .catch(() => {
         throw new Error(
           "data/embeddings.json not found. Run `npm run build-index` first (requires OPENAI_API_KEY)."
@@ -25,16 +37,17 @@ function loadIndex() {
   return indexPromise;
 }
 
-function cosineSimilarity(a, b) {
+// Eagerly warm the index at boot so the first live request doesn't pay for disk read + parse.
+loadIndex().catch(() => {});
+
+function cosineSimilarity(a, b, normB) {
   let dot = 0;
   let normA = 0;
-  let normB = 0;
   for (let i = 0; i < a.length; i++) {
     dot += a[i] * b[i];
     normA += a[i] * a[i];
-    normB += b[i] * b[i];
   }
-  return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+  return dot / (Math.sqrt(normA) * normB);
 }
 
 async function embedQuery(query, model) {
@@ -61,7 +74,7 @@ export async function searchResume(query, topK = 2) {
     .map((chunk) => ({
       section: chunk.section,
       text: chunk.text,
-      score: cosineSimilarity(queryEmbedding, chunk.embedding),
+      score: cosineSimilarity(queryEmbedding, chunk.embedding, chunk.norm),
     }))
     .sort((a, b) => b.score - a.score);
 
