@@ -25,9 +25,10 @@ function chunkResume(resume) {
 
   for (const job of resume.experience ?? []) {
     const highlights = (job.highlights ?? []).join(" ");
+    const summary = job.summary ? `${job.summary} ` : "";
     chunks.push({
       section: "experience",
-      text: `${job.role} at ${job.company} (${job.dates}). ${highlights}`.trim(),
+      text: `${job.role} at ${job.company} (${job.dates}). ${summary}${highlights}`.trim(),
     });
   }
 

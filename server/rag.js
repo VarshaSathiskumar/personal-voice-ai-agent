@@ -66,7 +66,7 @@ async function embedQuery(query, model) {
   return embedding;
 }
 
-export async function searchResume(query, topK = 2) {
+export async function searchResume(query, topK = 3) {
   const index = await loadIndex();
   const queryEmbedding = await embedQuery(query, index.model);
 
@@ -78,5 +78,14 @@ export async function searchResume(query, topK = 2) {
     }))
     .sort((a, b) => b.score - a.score);
 
-  return scored.slice(0, topK);
+  // Vague queries (e.g. "background") embed ambiguously and can rank
+  // keyword-dense project/experience chunks above the summary chunk, so
+  // always guarantee the summary is present as an identity anchor.
+  const top = scored.slice(0, topK);
+  if (!top.some((c) => c.section === "summary")) {
+    const summaryChunk = scored.find((c) => c.section === "summary");
+    if (summaryChunk) top.push(summaryChunk);
+  }
+
+  return top;
 }
