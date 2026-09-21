@@ -10,7 +10,7 @@ setGlobalDispatcher(new Agent({ keepAliveTimeout: 30_000, keepAliveMaxTimeout: 6
 
 const PORT = process.env.PORT || 3000;
 const REALTIME_MODEL = process.env.REALTIME_MODEL || "gpt-realtime";
-const REALTIME_VOICE = process.env.REALTIME_VOICE || "shimmer";
+const REALTIME_VOICE = process.env.REALTIME_VOICE || "coral";
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "https://varshasathiskumar.github.io";
 const LOCAL_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000"];
 
